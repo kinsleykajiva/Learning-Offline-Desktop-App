@@ -32,7 +32,8 @@ function saveNewQuestion() {
     }
     error_input_element(false , "mainQuestion");
     if(image_qstn !== 'null'){
-        if(!inp.files[0] && !inp.files){
+
+        if(inp.files.length == 0){
 
             error_input_element(true , "inp");
             Toast.fire({
@@ -55,40 +56,42 @@ function saveNewQuestion() {
     }
      error_input_element(false , "response_type");
     if(response_type === 'single'){
+         let anySlect = false;
          $("input.singlePossibleClass[type=radio]").each( (i ,el) => {
+                anySlect = !anySlect ?  $(el).is(':checked') : false ;
                 let value_ =$(el).parent().parent().prev("div").find("input").val() ;
-                let key_ = $(el).parent().children().attr('value')/*.find("input[type='checkbox']").val()*//*val().trim() */;
+                let key_ = $(el).parent().children().attr('value');
                  if(value_ !== ''){
                     singlePossibleClass . push( $(el).is(':checked') ?  { [key_] : value_}  : {'null' : value_ } );
                 }
 
             } );
-        if(singlePossibleClass === null || !singlePossibleClass.length ){
+        if( !singlePossibleClass.length /*|| !anySlect*/ ){
             Toast.fire({
                 timer:4000 ,
                 type: 'error',
-                title: 'Please Set Possible Solutions'
+                title: 'Please Set Possible Solutions single'
               }) ;
               return ;
         }
-
-
-
     }
     if(response_type === 'multiple'){
-        $("input.multipossibleselects[type=checkbox]").each( (i ,el) => {
+        let anySlect = false;
+        $("input.multiPossibleSelects[type=checkbox]").each( (i ,el) => {
+                 anySlect = !anySlect ?  $(el).is(':checked') : false ;
                 let value_ =$(el).parent().parent().prev("div").find("input").val() ;
-                let key_ = $(el).parent().children().attr('value')/*.find("input[type='checkbox']").val()*//*val().trim() */;
+                let key_ = $(el).parent().children().attr('value');
                 if (value_ !== '') {
-                    multipossibleselects . push($(el).is(':checked') ? { [key_] : value_}  : {'null' : value_ } );
+                    multiPossibleSelects . push($(el).is(':checked') ? { [key_] : value_}  : {'null' : value_ } );
                 }
 
             } );
-        if(multiPossibleSelects === null || !multiPossibleSelects.length ){
+
+        if( !multiPossibleSelects.length /* || !anySlect*/ ){
             Toast.fire({
                 timer:4000 ,
                 type: 'error',
-                title: 'Please Set Possible Solutions'
+                title: 'Please Set Possible Solutions m'
               }) ;
               return ;
         }
@@ -121,6 +124,9 @@ function saveNewQuestion() {
                                 type: 'success',
                                 title: 'Saved Question !'
                               }) ;
+                            emptyInputs(['mainQuestion' ,'inp'  ] , ['image_qstn' , 'response_type']);
+                            changeSolutionTypeView() ;
+                            changeImageSelection() ;
                         }else{
                             Toast.fire({
                                 timer:4000 ,

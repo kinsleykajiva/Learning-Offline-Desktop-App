@@ -284,7 +284,18 @@ function convertDateToReadableFormat(date_yyy_mm_dd){
 
 /*********************************************************************************************/
 
+function emptyInputs ( arrInput_ids , arrSelect_ids ) {
 
+    for(let i = 0 ; i < arrInput_ids.length ; i ++){
+        let id = arrInput_ids[i];
+        $("#"+id).val('');
+    }
+    for(let i = 0 ; i < arrSelect_ids.length ; i ++){
+        let id = arrSelect_ids[i];
+        $("#"+id).val('null');
+    }
+
+}
 
 /*********************************************************************************************/
 
