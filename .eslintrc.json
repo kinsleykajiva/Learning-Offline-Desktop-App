@@ -29,9 +29,7 @@
         "eqeqeq":"error" ,
         "no-useless-call":"error",       
         "brace-space":"warning" ,
-        "brace-style":"error",
-        "indent":"warn" ,
-        "one-var":"off" ,
+        "brace-style":"error" ,"one-var":"off" ,
         "no-var":"error",
         "prefer-arrow-callback":"error" ,
         "prefer-const":"warn"

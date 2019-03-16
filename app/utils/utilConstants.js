@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-let  bcrypt = require("bcrypt");
+/*let  bcrypt = require("bcrypt");*/
 
 
 const HOST = "localhost" ;
@@ -66,13 +66,13 @@ function getRndInteger(min, max) {
 /*-------------------------------------------------------------------------------------------------------*/
 /**
  * To encrypt the password .
- * @param {string} password 
+ * @param {string} password
  * @returns {string} hash
  */
 function encryptPassword(password) {
     let saltRounds = 12;
-    let   salt       = bcrypt.genSaltSync(saltRounds);
-    return bcrypt.hashSync(password, salt)  ;
+   /* let   salt       = bcrypt.genSaltSync(saltRounds);
+    return bcrypt.hashSync(password, salt)  ;*/
 }
 /*-------------------------------------------------------------------------------------------------------*/
 /**
@@ -82,8 +82,8 @@ function encryptPassword(password) {
  * @returns {boolean} boolean - true if valid else false not valid .
  */
 function isPassword(password , hash) {
-    
-    return bcrypt.compareSync(password, hash);
+
+    return 1/* bcrypt.compareSync(password, hash)*/;
 }
 /*-------------------------------------------------------------------------------------------------------*/
 
