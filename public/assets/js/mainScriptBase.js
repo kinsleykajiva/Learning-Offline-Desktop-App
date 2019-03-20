@@ -25,16 +25,19 @@ function thisNav( navObject ) {
     let template = null ;
     let clone    = null ;
 
+
     switch ( nav ) {
-        case 'create_questions':
-            template = navLinks[0] .import.querySelector(".task-template") ;
-            clone    = document.importNode(template.content , true);
-
-            contentHolder.empty().delay(500).append(clone);
-
-            lastClickedNav = nav ;
+        case 'temp_create_questions':
+            template = navLinks[0] .import.querySelector("."+nav) ;
+            break;
+        case 'temp_answer_questions':
+            template = navLinks[1].import.querySelector("." + nav);
             break;
         }
+
+        clone    = document.importNode(template.content , true);
+        contentHolder.empty().delay(500).append(clone);
+        lastClickedNav = nav ;
 
 }
 
@@ -298,7 +301,12 @@ function emptyInputs ( arrInput_ids , arrSelect_ids ) {
 }
 
 /*********************************************************************************************/
-
+const Toast = Swal.mixin({
+                        toast            : true,
+                        position         : 'top-end',
+                        showConfirmButton: false,
+                        timer            : 3000
+                });
 
 
 /*********************************************************************************************/

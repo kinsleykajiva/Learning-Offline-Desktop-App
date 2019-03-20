@@ -17,12 +17,42 @@
 
     selected_answers_arr : ['A' ,'B' ,'B']
  } ;
+
+ module.exports.getQustionImages = id => {
+      return new Promise ( ( resolve , reject) => {
+                db.find( { /*_id : id*/} , (error , docs) =>{
+                    if( error ) {
+                      reject("error");
+                    } else {
+                      resolve(docs) ;
+                    }
+                });
+      });
+ };
+ /**
+  * This willl fetch or get data in the size range or less than the batch if the parameter is set to any size not zero
+  * @param  {int array} batchOfSize get data in this size of or less than the set size but of the parameter is set to zero then ignore the size just get all the data from the database
+  * @return {Promise}             [Will retuen josn data via a promise of resolve but any errors then trigger reject]
+  */
+ module.exports.getAllQuestions = batchOfSize => {
+                                      return new Promise ( ( resolve , reject ) => {
+                                                  const skip  = batchOfSize[0] ; // was the last size
+                                                  const next = batchOfSize[1] ;
+                                                  db.find ({}) .skip(skip) .limit(next) .exec( ( err , docs) => {
+                                                      if(err){
+                                                        reject('err')
+                                                      } else {
+                                                        resolve(docs) ;
+                                                      }
+                                                  });
+                                      });
+ }
  /**
   * All the values can be null
   * qstnObject {
   *             _id:12 , figure_arr:'what is ...' , figure_arr:['base64String_1' , 'base64String_2'] ,
   *             solution_head :'select  possible Solution' ,
-  *             possible_solutions_arr : {A:'Option A' , B : 'option B' , null:'OptionC'} ,
+  *             possible_solutions_arr : [ {A:'Option A'} , {B : 'option B' } ,{null:'OptionC'} ] ,
 
   *             selected_answers_arr : ['A' ,'B' ,'B'] ,
   *             }
@@ -48,3 +78,4 @@
 
     );
  };
+
