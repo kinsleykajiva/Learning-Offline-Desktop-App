@@ -98,7 +98,7 @@ function saveNewQuestion() {
         solution_head : askForResponseSol === '' ?  'Select Solution .' : askForResponseSol ,
         possible_solutions_arr :  singlePossibleClass.length === 0 ? multiPossibleSelects : singlePossibleClass
     };
-    console.log(save);
+    //console.log(save);
     let myJSON = JSON.stringify(save);
 
     Swal.fire({

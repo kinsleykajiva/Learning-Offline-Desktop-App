@@ -25,6 +25,14 @@ app.use(
 app.use(bodyParser.json({limit:'150mb'}));
 
 /*------------------------------------------------------------------------------------------*/
+app.post("/saveResponse" , (req , res ) =>{
+   const  jObj = JSON.parse(req.body.data) ;
+   //console.log(jObj);
+   qstns.saveInsertAnswer(jObj) .then( response => {
+        res.json(response);
+   }).catch( err => console.log("Error @/saveResponse/" + err)) ;
+});
+/*------------------------------------------------------------------------------------------*/
 
 app.post('/writeQstn' , (req,res)=>{
             const dataObject = JSON.parse(req.body.data);
@@ -64,20 +72,14 @@ app.get("/imgGet" , (req , res)=>{
 
 /*------------------------------------------------------------------------------------------*/
 
-function toDelete(){
-axios.post('/user', {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
-  })
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
+
 /*------------------------------------------------------------------------------------------*/
 
+app.get( "/getsession"  , ( req , res ) => {
+            let session = req.query.sess ;
+            qstns.retriveSession( session ) .then( response => res.json(response) )
+            .catch( err => console.log("@/getsession/ " + err));
+});
 
 /*------------------------------------------------------------------------------------------*/
 

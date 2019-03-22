@@ -7,22 +7,95 @@ let QuizeArray = [] ;
 let idsArray = [] ;
 let currentQuizPosition = 0 ;
 let currentQuizId = null;
+let sessionID = receiptNumber() ;
+function markingProcess() {
+	// retrive session by using session id
+}
+function restartQstns(){
+	// this will restart the session
+	QuizeArray = [] ;
+	idsArray = [] ;
+	currentQuizPosition = 0 ;
+	currentQuizId = null ;
+	sessionID = receiptNumber() ;
+	Swal.fire({
+	          type: 'info',
+	          title: 'Process ',
+	          text: 'Retarting Session Please wait '  ,
+	          onBeforeOpen : ()=>{
+	            Swal.showLoading();
+	          }
+	    });
+	setTimeout(() => {
+		Swal.close();
+	}, 2500 * getRndInteger (2 , 6) );
+}
+function showNextQstn(){
+	if(currentQuizPosition === QuizeArray.flat().length || currentQuizPosition > QuizeArray.flat().length   ) {
+		Swal.fire({
+		          type: 'info',
+		          title: 'Progress State ',
+		          text: "Have answered all questions !"
+		    });
+		currentQuizPosition = 0 ;
+		$("#nextquestions").text("Done , Restart .");
+		return;
+	}
+	let choices = []  ;
+	$(".ans_resp_qnst_" + currentQuizId ) .each( (index, el) => {
+		if( $(el).is(':checked') ) {
+			choices .push( $(el).val()) ;
+		}
 
+	});
+
+	Swal.fire({
+	          type: 'info',
+	          title: 'Process ',
+	          text: 'Wait ... '  ,
+	          onBeforeOpen : ()=>{
+	            Swal.showLoading();
+	          }
+	    });
+	let obj = {
+		qstn_id : currentQuizId ,
+		qstn_response_arr : choices ,
+		qstn_user_id : '123456789' ,
+		session : sessionID
+	};
+	let myJSON = JSON.stringify(obj);
+	$.post(url_ + 'saveResponse', {data : myJSON
+	} ).done(response => {
+		let json = response ;
+		if( json.length ){
+			nextQstn();
+		}
+		Swal.close();
+	}).fail( () => console.log(err));
+
+
+}
 function nextQstn () {
-	currentQuizPosition++ ;
+
 	currentQuizId = idsArray [currentQuizPosition] ;
 	let quizes = QuizeArray.flat() ;
-	$("#question_quize").html(quizes[currentQuizPosition]);
-	getQuestionImage(currentQuizId) ;
+	//console.log(quizes[currentQuizPosition]);
+	$("#question_quize").html(quizes[currentQuizPosition])
+			.promise().done(
+				()=> getQuestionImage(currentQuizId)
+			) ;
+	currentQuizPosition++ ;
+	$("#qstn_numberer").text('Question Number ' + currentQuizPosition ) ;
+	$("#counter_out_of").text(' ' + currentQuizPosition + ' out of ' +  quizes.length ) ;
+
 }
 function startTest() {
+	sessionID = receiptNumber() ;
 	getQuestions () ;
-	currentQuizId = idsArray [currentQuizPosition] ;
-	let quizes = QuizeArray.flat() ;
-	$("#question_quize").html(quizes[currentQuizPosition]);
-	getQuestionImage(currentQuizId) ;
+
 }
 
+setTimeout(()=> startTest() , 2500);
 
 function renderQuetsionToScreen(){
 	// [array(2) , array(5)]
@@ -52,13 +125,8 @@ function getQuestions () {
 		if(json.length){
 			let xr = createQuestionView(json);
 			QuizeArray.push ( xr ) ;
+			nextQstn (); // start the session
 			 Swal.close();
-
-			/*
-			currentQuizId = idsArray [currentQuizPosition] ;
-			$("#question_quize").html(xr[currentQuizPosition]);
-			getQuestionImage(currentQuizId) ;
-			*/
 		}
 	}).catch( err => {
 		/*console.log(err);*/
@@ -89,11 +157,17 @@ function getQuestionImage (id_record) {
 				let imgSrc = response[ i ]  ;
 				let id = "img_"+imgSrc._id ;
 				//console.log(imgSrc._id);
-				if ( !$("#img_"+imgSrc._id) .length ) {
-				       // alert ( 'Error: ' );
-				    }
-				    $("#diagrame_"+imgSrc._id) . slideUp("slow");
-				document.getElementById(id).src = imgSrc.figures[0];
+				if ( $("#" + id ) .length ) {
+					if ( imgSrc.figures == null ) {
+						$("#diagrame_" + imgSrc._id ).slideUp("slow");
+					}
+					if ( imgSrc.figures != null ) {
+						$("#diagrame_" + imgSrc._id  ).slideDown("slow");
+						document.getElementById(id).src = imgSrc.figures[0];
+					}
+
+				}
+
 
 			}
 		}
@@ -102,6 +176,7 @@ function getQuestionImage (id_record) {
 // getQuestions () ;
 function createQstnAnswers(id,data) {
 	let li = ``;
+	let kId = id ;
 	id = 'anns_' + id ;
 
 	let SingSolutionedFlatArray = data.map(Object.keys).flat(); // outputs ["A", "B", "null"] or ["A", "B", "null","null"]
@@ -116,9 +191,9 @@ function createQstnAnswers(id,data) {
 		let key = Object.keys(val) ;
 		let value = val [ key ]  ;
 		li += `
-		   <li>
+		   <li id='ans_rep'${kId} >
 	                    <label>
-	                        <input type="${type}" name="answerGroup" value="${key}" id="${id}">
+	                        <input class="ans_resp_${kId}" type="${type}" name="answerGroup" value="${key}" id="${id}">
 	                         ${value}
                                 </label>
 	                </li>
@@ -153,9 +228,9 @@ function createQuestionView (data) {
                                                     ${answerList}
                                                 </ul>
                                                 <div class="questionsRow">
-	                                                <a href="javascript:void(0);" class="button" id="nextquestions">Next</a>
-	                                                <a href="javascript:void(0);" class="button" id="skipquestions">Skip</a>
-	                                                <span>2 of 20</span>
+	                                                <a href="javascript:void(0);" onclick="showNextQstn()" class="button" id="nextquestions">Next</a>
+	                                                <a style="display:none;" href="javascript:void(0);" class="button" id="skipquestions">Skip</a>
+	                                                <span id="counter_out_of">2 of 20</span>
                                                 </div>
                                             </div>
                                         </div>

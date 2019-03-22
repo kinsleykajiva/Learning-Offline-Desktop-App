@@ -8,19 +8,19 @@ File: style.css
 /* =============
   == Table of Contents==
 
-	- Custom Css
-	- Generic classes
-		-	Margin, Padding, Font class, text align, position, floating, overflow, background class, text color, display class, boarder class
-	- Theme Elements
-		-	Icons, Accordion, Button, Redial, floating actions, FAB, tabs, typography, buttons, box shadow, slider page, error page, Breadcrumb, pagination, Basic card, Login card
-	- General Elements
-		-	Modal, Nestable, Lable & Badges, List, Portlates, Preloader, Calender, To-Do, Materialize general elements, Lables
-	- Advance Form Elements
-	- Pages
-		-	Loader page, Invoice, Tasklist, Task detail, Range-slider, Counter, Maintenance, Color, FAQ, Progress, Panels & wells, Contact card, Auth pages, Flag
-		-	Gallery, Products pages, Widget, Email, Social timeline, Datatable, Chat, Blog, Wizard, CRM dashboard, Task board, Issue list, Chartlist, X-editable
-		-	Home chat, Dashboard 1-2-3-4
-	- Responsive media class
+  - Custom Css
+  - Generic classes
+    - Margin, Padding, Font class, text align, position, floating, overflow, background class, text color, display class, boarder class
+  - Theme Elements
+    - Icons, Accordion, Button, Redial, floating actions, FAB, tabs, typography, buttons, box shadow, slider page, error page, Breadcrumb, pagination, Basic card, Login card
+  - General Elements
+    - Modal, Nestable, Lable & Badges, List, Portlates, Preloader, Calender, To-Do, Materialize general elements, Lables
+  - Advance Form Elements
+  - Pages
+    - Loader page, Invoice, Tasklist, Task detail, Range-slider, Counter, Maintenance, Color, FAQ, Progress, Panels & wells, Contact card, Auth pages, Flag
+    - Gallery, Products pages, Widget, Email, Social timeline, Datatable, Chat, Blog, Wizard, CRM dashboard, Task board, Issue list, Chartlist, X-editable
+    - Home chat, Dashboard 1-2-3-4
+  - Responsive media class
 
 ============= */
 /**  =====================
@@ -10833,7 +10833,7 @@ label.txt-ellipsis {
 .j-pro input[type="password"],
 .j-pro input[type="email"],
 .j-pro input[type="search"],
-.j-pro input[type="url"],
+.j-pro input[type="underline"],
 .j-pro textarea,
 .j-pro select,
 .j-forms input[type="text"],

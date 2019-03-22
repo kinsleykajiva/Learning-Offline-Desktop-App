@@ -9,6 +9,18 @@
     filename:'qnsts.db' ,
     autoload : true
  });
+ const dbResponses = new  nedDb ( {
+          filename : 'qstn_responses.db' ,
+          autoload : true
+ }) ;
+
+ let RESPONS_SCHEMA = {
+                              qstn_id : 12 ,
+                              selected_response_arr : ['A'] ,
+                              saved_on_date : new Date() ,
+                              saved_by : 'user_id' ,
+                              session : 'jyu67n76756rghy'
+                         };
 
  const SCHEMA_MIXED =  { id:12 , figurearr:'what is ...' ,
     figure_arr:['base64String_1' , 'base64String_2'] ,
@@ -18,6 +30,39 @@
     selected_answers_arr : ['A' ,'B' ,'B']
  } ;
 
+module.exports.retriveSession = sessionID => return new Promise ( ( resolve , reject ) => {
+                                                      dbResponses.find({
+                                                              session : sessionID
+                                                      } , ( err , docs ) => {
+
+                                                              if ( err ) {
+                                                                reject("-9") ;
+                                                              } else {
+                                                                resolve(docs) ;
+                                                              }
+                                                      });
+                              } );
+
+module.exports.saveInsertAnswer  = responseObject => {
+                                      return new Promise ( ( resolve , reject ) =>{
+
+                                                let obj = {
+                                                  qstn_id : responseObject.qstn_id  ,
+                                                  qstn_response_arr : responseObject.qstn_response_arr  ,
+                                                  qstn_user_id  : responseObject.qstn_user_id ,
+                                                  session : responseObject.session
+                                                  saved_on_date : new Date()
+                                                };
+
+                                                dbResponses.insert( obj , ( error , newdoc) =>{
+                                                      if( error ) {
+                                                        reject("-10") ;
+                                                      } else {
+                                                        resolve("done") ;
+                                                      }
+                                                });
+                                      } );
+};
  module.exports.getQustionImages = id => {
       return new Promise ( ( resolve , reject) => {
                 db.find( { /*_id : id*/} , (error , docs) =>{
