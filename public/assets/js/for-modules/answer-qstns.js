@@ -9,9 +9,40 @@ let currentQuizPosition = 0 ;
 let currentQuizId = null;
 let sessionID = receiptNumber() ;
 function markingProcess() {
+	let selectedChoices = {} ;
 	// retrive session by using session id
+	$.get(url_ + 'getsession' , {
+		sess : sessionID
+	}).done( response => {
+		if ( response.length ) {
+			// now lets gather together all the data required
+			for (let x = 0 ; x < response.length ; x++) {
+				let val = response [ x ] ;
+				selectedChoices = objectsMerge({ [val.qstn_id] : val.qstn_response_arr } , selectedChoices );
+			}
+			let cuurentQstns = QuizeArray.flat() ;
+			let qstnAnsObj = {} ;
+			for (let  i = 0 ; i < cuurentQstns.length ; i++ ) {
+				let qstn = cuurentQstns [ i ] ;
+				qstnAnsObj = objectsMerge( { [ qstn._id ] : qstn.possible_solutions_arr } , qstnAnsObj ) ;
+
+			}
+			console.log(selectedChoices)
+			console.log(qstnAnsObj) ;
+			let xc = _.intersectionWith(selectedChoices,qstnAnsObj  , _.isEqual)
+			console.log(xc) ;
+			// now lets start marking using the data gathered
+			// selectedChoices
+			Object.entries( selectedChoices ).forEach( (key_ , val_) =>{
+				//
+				//_.includes( val_ , "null", [fromIndex=0])
+				let xc = _.intersectionWith(selectedChoices,qstnAnsObj  , _.isEqual)
+			});
+		}
+	});
 }
 function restartQstns(){
+
 	// this will restart the session
 	QuizeArray = [] ;
 	idsArray = [] ;
@@ -31,6 +62,7 @@ function restartQstns(){
 	}, 2500 * getRndInteger (2 , 6) );
 }
 function showNextQstn(){
+	markingProcess() ;
 	if(currentQuizPosition === QuizeArray.flat().length || currentQuizPosition > QuizeArray.flat().length   ) {
 		Swal.fire({
 		          type: 'info',
@@ -41,6 +73,7 @@ function showNextQstn(){
 		$("#nextquestions").text("Done , Restart .");
 		return;
 	}
+
 	let choices = []  ;
 	$(".ans_resp_qnst_" + currentQuizId ) .each( (index, el) => {
 		if( $(el).is(':checked') ) {

@@ -30,7 +30,7 @@
     selected_answers_arr : ['A' ,'B' ,'B']
  } ;
 
-module.exports.retriveSession = sessionID => return new Promise ( ( resolve , reject ) => {
+module.exports.retriveSession = sessionID => { return new Promise ( ( resolve , reject ) => {
                                                       dbResponses.find({
                                                               session : sessionID
                                                       } , ( err , docs ) => {
@@ -41,7 +41,7 @@ module.exports.retriveSession = sessionID => return new Promise ( ( resolve , re
                                                                 resolve(docs) ;
                                                               }
                                                       });
-                              } );
+                              } ) };
 
 module.exports.saveInsertAnswer  = responseObject => {
                                       return new Promise ( ( resolve , reject ) =>{
@@ -50,7 +50,7 @@ module.exports.saveInsertAnswer  = responseObject => {
                                                   qstn_id : responseObject.qstn_id  ,
                                                   qstn_response_arr : responseObject.qstn_response_arr  ,
                                                   qstn_user_id  : responseObject.qstn_user_id ,
-                                                  session : responseObject.session
+                                                  session : responseObject.session ,
                                                   saved_on_date : new Date()
                                                 };
 
