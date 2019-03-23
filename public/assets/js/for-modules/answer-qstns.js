@@ -8,39 +8,14 @@ let idsArray = [] ;
 let currentQuizPosition = 0 ;
 let currentQuizId = null;
 let sessionID = receiptNumber() ;
+let correctCollect = [] ;
+let dataSrc = []; // keep this variable in check esp when new questio are added and this will need acheck on references
+let scoreSum = 0 ;
 function markingProcess() {
-	let selectedChoices = {} ;
-	// retrive session by using session id
-	$.get(url_ + 'getsession' , {
-		sess : sessionID
-	}).done( response => {
-		if ( response.length ) {
-			// now lets gather together all the data required
-			for (let x = 0 ; x < response.length ; x++) {
-				let val = response [ x ] ;
-				selectedChoices = objectsMerge({ [val.qstn_id] : val.qstn_response_arr } , selectedChoices );
-			}
-			let cuurentQstns = QuizeArray.flat() ;
-			let qstnAnsObj = {} ;
-			for (let  i = 0 ; i < cuurentQstns.length ; i++ ) {
-				let qstn = cuurentQstns [ i ] ;
-				qstnAnsObj = objectsMerge( { [ qstn._id ] : qstn.possible_solutions_arr } , qstnAnsObj ) ;
 
-			}
-			console.log(selectedChoices)
-			console.log(qstnAnsObj) ;
-			let xc = _.intersectionWith(selectedChoices,qstnAnsObj  , _.isEqual)
-			console.log(xc) ;
-			// now lets start marking using the data gathered
-			// selectedChoices
-			Object.entries( selectedChoices ).forEach( (key_ , val_) =>{
-				//
-				//_.includes( val_ , "null", [fromIndex=0])
-				let xc = _.intersectionWith(selectedChoices,qstnAnsObj  , _.isEqual)
-			});
-		}
-	});
+	scoreSum = correctCollect.reduce( (total, currentValue) => {   return total + currentValue.score; },  scoreSum);
 }
+
 function restartQstns(){
 
 	// this will restart the session
@@ -49,6 +24,8 @@ function restartQstns(){
 	currentQuizPosition = 0 ;
 	currentQuizId = null ;
 	sessionID = receiptNumber() ;
+	correctCollect = [] ;
+	scoreSum = 0 ;
 	Swal.fire({
 	          type: 'info',
 	          title: 'Process ',
@@ -62,12 +39,13 @@ function restartQstns(){
 	}, 2500 * getRndInteger (2 , 6) );
 }
 function showNextQstn(){
-	markingProcess() ;
+
 	if(currentQuizPosition === QuizeArray.flat().length || currentQuizPosition > QuizeArray.flat().length   ) {
+		markingProcess() ;
 		Swal.fire({
 		          type: 'info',
 		          title: 'Progress State ',
-		          text: "Have answered all questions !"
+		          text: "Have answered all questions ! \n Your Score is " + scoreSum + ' out of ' + QuizeArray.flat().length
 		    });
 		currentQuizPosition = 0 ;
 		$("#nextquestions").text("Done , Restart .");
@@ -75,12 +53,29 @@ function showNextQstn(){
 	}
 
 	let choices = []  ;
+
 	$(".ans_resp_qnst_" + currentQuizId ) .each( (index, el) => {
 		if( $(el).is(':checked') ) {
 			choices .push( $(el).val()) ;
 		}
 
 	});
+	let cuurentQstns = QuizeArray.flat() ;
+	let qstn = dataSrc [ currentQuizPosition ] ;
+
+	let qstn_solutions = qstn.map(Object.keys).flat(); // outputs ["A", "B", "null"] or ["A", "B", "null","null"]
+
+	qstn_solutions = qstn_solutions.filter(item => item !== 'null') ; // _.pull(qstn_solutions, 'null');
+
+	if(choices.length){
+		let choices_new = choices.filter(item => item !== 'null')  //  _.pull(choices, 'null') ;
+
+		choices_new.forEach( val => {
+			if (qstn_solutions.includes( val )) {
+				correctCollect.push({'id' : currentQuizId , 'correct' : val , 'score' : 1 }) ;
+			}
+		});
+	}
 
 	Swal.fire({
 	          type: 'info',
@@ -210,6 +205,7 @@ function getQuestionImage (id_record) {
 function createQstnAnswers(id,data) {
 	let li = ``;
 	let kId = id ;
+	dataSrc . push(data) ;
 	id = 'anns_' + id ;
 
 	let SingSolutionedFlatArray = data.map(Object.keys).flat(); // outputs ["A", "B", "null"] or ["A", "B", "null","null"]

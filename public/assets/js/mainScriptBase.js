@@ -155,8 +155,9 @@ function receiptNumber() {
     let dd = ret.split('/')[0];
     let mm = ret.split('/')[1];
     let yyyy = ret.split('/')[2];
-    let ranS = randString(getRndInteger(5, 8)).toUpperCase();
-    ret = dd + ranS.substring(2, 4) + ranS.charAt(getRndInteger(1, 2)) + '-' + mm + '-' + ranS.charAt(getRndInteger(1, 4)) + yyyy;
+    let millTime = new Date().getMilliseconds() ;
+    let ranS = randString(getRndInteger(5, getRndInteger(3, 22))).toUpperCase();
+    ret = dd + ranS.substring(2, 4) + ranS.charAt(getRndInteger(1, 2)) + '-' + mm + '-' + ranS.charAt(getRndInteger(1, 8)) + yyyy + '`'+millTime;
     return ret;
 }
 /*********************************************************************************************/
