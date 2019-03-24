@@ -142,6 +142,10 @@ function thisNav( navObject ) {
         case 'temp_answer_questions':
             template = navLinks[1].import.querySelector("." + nav);
             break;
+        case 'temp_session_tables':
+            template = navLinks[2].import.querySelector("." + nav);
+            break;
+
         }
 
         clone    = document.importNode(template.content , true);
