@@ -5,7 +5,8 @@
   "repository": "https://bitbucket.org/kajivakinsley/learning-offline-dumprevisionsystem.git",
   "main": "app/index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [
     "dump",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "electron": "4.0.8",
+    "electron-builder": "^20.39.0",
     "electron-connect": "^0.6.3",
     "electron-reloader": "^0.2.0",
     "gulp": "^4.0.0"

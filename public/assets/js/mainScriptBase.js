@@ -13,6 +13,115 @@ const navLinks       = document.querySelectorAll('link[rel="import"]');
 const contentHolder  = $("#mainContent") ;
 let   lastClickedNav = null;
 /*********************************************************************************************/
+$.notifyDefaults({
+
+    allow_dismiss: true
+});
+/*********************************************************************************************/
+
+function notify_simple(message, time_in_seconds){
+        $.growl({
+            message: message
+        },{
+            type: 'inverse',
+            allow_dismiss: false,
+            label: 'Cancel',
+            className: 'btn-xs btn-inverse',
+            placement: {
+                from: 'bottom',
+                align: 'right'
+            },
+            delay: time_in_seconds * 1000 ,
+            animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+            },
+            offset: {
+                x: 30,
+                y: 30
+            }
+        });
+    };
+
+/*********************************************************************************************/
+
+function notify_warning (title  , message , time_in_seconds ) {
+    let animationBe = animatedRandomTypes() ;
+    $.notify({
+        icon: 'glyphicon glyphicon-warning-sign',
+        title: title=== '' ? 'Notice ! ' :  title ,
+        message: message
+    },{
+        // settings
+        type: 'danger' ,
+        newest_on_top: true,
+        showProgressbar: false,
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        offset: 20,
+        spacing: 10,
+        z_index: 1031,
+        delay: time_in_seconds * 1000  ,
+        animate: {
+            enter: animationBe [0] ,
+            exit: animationBe [1]
+        }
+    });
+}
+
+/*********************************************************************************************/
+
+function animatedRandomTypes() {
+            let num = getRndInteger( 0, 30 ) ;
+            let ret = ['animated fadeInDown' , 'animated fadeOutUp'] ;
+            switch ( num  ) {
+                case 1 : ret = ['animated fadeInDown' , 'animated fadeOutUp'] ; break ;
+                case 2 : ret = ['animated shake' , 'animated headshake'] ; break ;
+                case 3 : ret = ['animated swing' , 'animated tada'] ; break ;
+                case 29 : ret = ['animated wobble' , 'jello '] ; break ;
+                case 4 : ret = ['animated bounceInLeft' , 'animated bounceOutRight'] ; break ;
+                case 5 : ret = ['animated bounceInUp' , 'animated bounceOut'] ; break ;
+                case 6 : ret = ['animated bounceInRight' , 'animated bounceOutLeft'] ; break ;
+                case 7 : ret = ['animated rotateInDownLeft' , 'animated bounceOutUp'] ; break ;
+                case 8 : ret = ['animated fadeIn' , 'animated fadeOut'] ; break ;
+                case 9: ret = ['animated fadeInDown' , 'animated fadeOutDown'] ; break ;
+                case 10 : ret = ['animated fadeInLeft' , 'animated  fadeOutLeft'] ; break ;
+                case 12 : ret = ['animated fadeInRight' , 'animated fadeOutRight'] ; break ;
+                case 13 : ret = ['animated fadeInUp' , 'animated fadeInUpBig'] ; break ;
+                case 14 : ret = ['animated fadeInDown' , 'animated fadeOutDownBig'] ; break ;
+                case 15 : ret = ['animated fadeInLeftBig' , 'animated fadeOutLeftBig'] ; break ;
+                case 16 : ret = ['animated fadeInRightBig' , 'animated fadeOutRightBig'] ; break ;
+                case 17 : ret = ['animated fadeInDownBig' , 'animated fadeOutUpBig'] ; break ;
+                case 18 : ret = ['animated flipInX' , 'animated flipOutX'] ; break ;
+                case 19 : ret = ['animated flipInY' , 'animated flipOutY'] ; break ;
+                case 20 : ret = ['animated lightSpeedIn' , 'animated lightSpeedOut'] ; break ;
+                case 21 : ret = ['animated rotateIn' , 'animated bounceOutDown'] ; break ;
+                case 22 : ret = ['animated rotateInDownRight' , 'animated rotateOutDownLeft'] ; break ;
+                case 23 : ret = ['animated rotateInUpRight' , 'animated rotateOut'] ; break ;
+                case 24 : ret = ['animated rotateInUpLeft' , 'animated rotateOutDownRight'] ; break ;
+                case 25 : ret = ['animated slideInDown' , 'animated slideOutDown'] ; break ;
+                case 26 : ret = ['animated slideInRight' , 'animated slideOutRight'] ; break ;
+                case 27 : ret = ['animated slideInLeft' , 'animated slideOutLeft'] ; break ;
+                case 28 : ret = ['animated slideInUp' , 'animated slideOutUp'] ; break ;
+                default : ret = ['animated fadeInDown' , 'animated fadeOutUp'] ;
+            }
+            return ret ;
+}
+
+/*********************************************************************************************/
+
+
+
+
+/*********************************************************************************************/
+
+
+
+
+/*********************************************************************************************/
+
 // if all die you like thu
 /**This controls the navigation of the side bar */
 function thisNav( navObject ) {
@@ -312,7 +421,13 @@ const Toast = Swal.mixin({
 
 /*********************************************************************************************/
 
-
+const swalWithBootstrapButtons = Swal.mixin({
+                                              customClass: {
+                                                confirmButton: 'btn btn-success',
+                                                cancelButton: 'btn btn-danger'
+                                            },
+                                            buttonsStyling: false,
+                                }) ;
 
 
 /*********************************************************************************************/

@@ -19,14 +19,15 @@ function markingProcess() {
 function restartQstns(){
 
 	// this will restart the session
-	QuizeArray = [] ;
+	//QuizeArray = [] ;
 	idsArray = [] ;
 	currentQuizPosition = 0 ;
 	currentQuizId = null ;
 	sessionID = receiptNumber() ;
+	currentQuizPosition = 0 ;
 	correctCollect = [] ;
 	scoreSum = 0 ;
-	Swal.fire({
+	/*Swal.fire({
 	          type: 'info',
 	          title: 'Process ',
 	          text: 'Retarting Session Please wait '  ,
@@ -36,21 +37,45 @@ function restartQstns(){
 	    });
 	setTimeout(() => {
 		Swal.close();
-	}, 2500 * getRndInteger (2 , 6) );
+	}, 2500 * getRndInteger (2 , 6) );*/
 }
 
-function stageCompletion () {}
+function stageCompletion () {
+	swalWithBootstrapButtons.fire({
+				 /* title: 'System Message ',*/
+				  text: "You Have answered all questions ! \n Your Score is " + scoreSum + ' out of ' + QuizeArray.flat().length ,
+				  type: 'info',
+				  showCancelButton: true,
+				  confirmButtonText: 'Yes, Restart!',
+				  cancelButtonText: 'No, just cancel!',
+				  allowOutsideClick : false ,
+				  reverseButtons: true
+				}).then((result) => {
+
+				  if (result.value) {
+				  	restartQstns() ;
+				  	 showNextQstn();
+					    swalWithBootstrapButtons.fire(
+					      'New Session Created !',
+					      'You can now proceed to questions',
+					      'success'
+					    )
+				  } else if ( result.dismiss === Swal.DismissReason.cancel ) {
+				    swalWithBootstrapButtons.fire(
+				      'Cancelled',
+				      'Done , Closed',
+				      'info'
+				    )
+				  }
+	}) ;
+}
 
 function showNextQstn(){
 
 	if(currentQuizPosition === QuizeArray.flat().length || currentQuizPosition > QuizeArray.flat().length   ) {
 		markingProcess() ;
-		Swal.fire({
-		          type: 'info',
-		          title: 'Progress State ',
-		          text: "You Have answered all questions ! \n Your Score is " + scoreSum + ' out of ' + QuizeArray.flat().length
-		    });
-		currentQuizPosition = 0 ;
+		stageCompletion () ;
+
 		$("#nextquestions").text("Done , Restart .");
 		return;
 	}
