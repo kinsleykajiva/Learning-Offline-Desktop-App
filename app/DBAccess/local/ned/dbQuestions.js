@@ -30,6 +30,18 @@
     selected_answers_arr : ['A' ,'B' ,'B']
  } ;
 
+module.exports.getAllSession = () => {  return new Promise ( (resolve , reject ) => {
+                                                  dbResponses.find({} , (err , docs)=>{
+                                                        if (err) {
+                                                            reject("-9") ;
+                                                        } else {
+                                                            resolve(docs) ;
+                                                        }
+                                                  });
+                                          } )
+
+};
+
 module.exports.retriveSession = sessionID => { return new Promise ( ( resolve , reject ) => {
                                                       dbResponses.find({
                                                               session : sessionID
@@ -51,6 +63,7 @@ module.exports.saveInsertAnswer  = responseObject => {
                                                   qstn_response_arr : responseObject.qstn_response_arr  ,
                                                   qstn_user_id  : responseObject.qstn_user_id ,
                                                   session : responseObject.session ,
+                                                  score : responseObject.score ,
                                                   saved_on_date : new Date()
                                                 };
 

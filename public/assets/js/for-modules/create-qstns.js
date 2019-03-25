@@ -109,7 +109,7 @@ function saveNewQuestion() {
             Swal.showLoading();
           }
     });
-    $.post("http://localhost:3500/writeQstn", {
+    $.post(url_ + "writeQstn", {
                 data : myJSON
     }).done( response => {
                         Swal.close() ;

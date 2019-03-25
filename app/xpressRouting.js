@@ -75,10 +75,26 @@ app.get("/imgGet" , (req , res)=>{
 
 /*------------------------------------------------------------------------------------------*/
 
+app.get( "/tag"  , ( req , res ) => {
+            qstns.getAllSession() .then( response => res.json(response) )
+            .catch( err => console.log("@/tag/ " + err));
+});
+
+/*------------------------------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------------------------------*/
+
 app.get( "/getsession"  , ( req , res ) => {
             let session = req.query.sess ;
-            qstns.retriveSession( session ) .then( response => res.json(response) )
-            .catch( err => console.log("@/getsession/ " + err));
+            if (session === '1'){
+                  qstns.getAllSession() .then( response => res.json(response) )
+                  .catch( err => console.log("@/tag/ " + err));
+            } else {
+                  qstns.retriveSession( session ) .then( response => res.json(response) )
+                  .catch( err => console.log("@/getsession/ " + err));
+            }
+
 });
 
 /*------------------------------------------------------------------------------------------*/

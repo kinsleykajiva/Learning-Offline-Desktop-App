@@ -1,8 +1,8 @@
-'use strict' ;
+//'use strict' ;
 
 let skip = 0 ;
 let next = 10 ;
-const url_ = "http://localhost:3500/" ;
+
 let QuizeArray = [] ;
 let idsArray = [] ;
 let currentQuizPosition = 0 ;
@@ -96,11 +96,13 @@ function showNextQstn(){
 	            Swal.showLoading();
 	          }
 	    });
+	let temp_scoreSum = correctCollect.reduce( (total, currentValue) => {   return total + currentValue.score; },  0 );
 	let obj = {
 		qstn_id : currentQuizId ,
 		qstn_response_arr : choices ,
-		qstn_user_id : '123456789' ,
-		session : sessionID
+		qstn_user_id : $("#loogedUseer").text().trim() ,
+		session : sessionID ,
+		score : temp_scoreSum
 	};
 	let myJSON = JSON.stringify(obj);
 	$.post(url_ + 'saveResponse', {data : myJSON
@@ -135,7 +137,7 @@ function startTest() {
 
 }
 
-setTimeout(()=> startTest() , 2500);
+setTimeout(()=> startTest() , 1500);
 
 function renderQuetsionToScreen(){
 	// [array(2) , array(5)]
