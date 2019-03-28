@@ -1,14 +1,8 @@
 
-const body_data = $("#body_data");
-const select_options = $("#select_options");
-const no_data = $("#no_data");
-
-
-
-
 function groupData (data) {
 	let arr = [] ;
 	let tempArr = [] ;
+	let objKey = null ;
 	data.forEach( (val , i) => {
 		objKey = val.session;
 
@@ -43,11 +37,13 @@ function groupData (data) {
 
 }
 function tableChange() {
+	let select_options = $("#select_options");
 	if(select_options.val() !== 'null') {
 		getSessionData(select_options.val())
 	}
 }
 function renderOptions(data) {
+	let select_options = $("#select_options");
 	let option = `` ;
 	data.forEach( (val , ind) =>{
 		let time = val.saved_on_date.split('T')[1].split('.')[0] ;
@@ -57,12 +53,13 @@ function renderOptions(data) {
 	select_options.append(option) ;
 }
 function getSessionData(sessionID) {
-
+	const body_data = $("#body_data");
 	$.get(url_ +  'getsession' ,{
 		sess : sessionID
 	}).done( response =>{
 		// end loading
 		//console.log(response);
+		let no_data = $("#no_data");
 		if(response.length) {
 			response = groupData(response) ;
 			let rows = createRows (response);
@@ -80,9 +77,9 @@ function getSessionData(sessionID) {
 		console.error("failed to connect");
 	});
 }
-setTimeout(() =>{
+/*setTimeout(() =>{
 	getSessionData('1');
-},500) ;
+},500) ;*/
 
 function createRows (data) {
 	let row = ``;

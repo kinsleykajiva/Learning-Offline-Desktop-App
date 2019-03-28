@@ -26,6 +26,7 @@ function restartQstns(){
 	sessionID = receiptNumber() ;
 	correctCollect = [] ;
 	scoreSum = 0 ;
+	reloadSession = true ;
 	Swal.fire({
 	          type: 'info',
 	          title: 'Process ',
@@ -114,13 +115,31 @@ function showNextQstn(){
 		Swal.close();
 	}).fail( () => console.log(err));
 
-
+}
+/**
+ * This is dead similar to the nextQstn() just that it does not increament current position file global variable [currentQuizPosition]
+ * The aim is to resume as the data was reatined when the view changed but the scenes could have changed .
+*/
+function resumeSession () {
+	
+	currentQuizPosition-- ;
+	currentQuizId = idsArray [currentQuizPosition] ;
+	
+	let quizes = QuizeArray.flat() ;
+	//console.log("Now Position" + [currentQuizPosition]);
+	$("#question_quize").html(quizes[currentQuizPosition])
+			.promise().done(
+				()=> getQuestionImage(currentQuizId)
+			) ;
+	currentQuizPosition++;		
+	$("#qstn_numberer").text('Question Number ' + currentQuizPosition   ) ;
+	$("#sessionID").text( ' . Session ID : ' + sessionID);
+	$("#counter_out_of").text(' ' + currentQuizPosition    + ' out of ' +  quizes.length ) ;	
 }
 function nextQstn () {
 
 	currentQuizId = idsArray [currentQuizPosition] ;
 	let quizes = QuizeArray.flat() ;
-	//console.log(quizes[currentQuizPosition]);
 	$("#question_quize").html(quizes[currentQuizPosition])
 			.promise().done(
 				()=> getQuestionImage(currentQuizId)
@@ -132,12 +151,17 @@ function nextQstn () {
 
 }
 function startTest() {
+	if ( ! reloadSession ) {
+		resumeSession () ;
+		return;
+	}
 	sessionID = receiptNumber() ;
+	reloadSession = false ;
 	getQuestions () ;
 
 }
 
-setTimeout(()=> startTest() , 1500);
+// setTimeout(()=> startTest() , 1500);
 
 function renderQuetsionToScreen(){
 	// [array(2) , array(5)]
@@ -149,6 +173,7 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 function getQuestions () {
+	
 	Swal.fire({
 	          type: 'info',
 	          title: 'Process ',
@@ -256,7 +281,7 @@ function createQstnAnswers(id,data) {
 		let key = Object.keys(val) ;
 		let value = val [ key ]  ;
 		li += `
-		   <li id='ans_rep'${kId} >
+		   <li id='ans_rep${kId}' >
 	                    <label>
 	                        <input onchange="ansCheckChange('${type}' , '${id}' );"  class="ans_resp_${kId}" type="${type}" name="answerGroup" value="${key}" id="${id}">
 	                         ${value}

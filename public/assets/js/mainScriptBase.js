@@ -13,6 +13,7 @@ const navLinks       = document.querySelectorAll('link[rel="import"]');
 const contentHolder  = $("#mainContent") ;
 let   lastClickedNav = null;
 const url_ = "http://localhost:3500/" ;
+let reloadSession = true ;
 /*********************************************************************************************/
 $.notifyDefaults({
 
@@ -78,16 +79,16 @@ function animatedRandomTypes() {
             let num = getRndInteger( 0, 30 ) ;
             let ret = ['animated fadeInDown' , 'animated fadeOutUp'] ;
             switch ( num  ) {
-                case 1 : ret = ['animated fadeInDown' , 'animated fadeOutUp'] ; break ;
-                case 2 : ret = ['animated shake' , 'animated headshake'] ; break ;
-                case 3 : ret = ['animated swing' , 'animated tada'] ; break ;
+                case 1 : ret  = ['animated fadeInDown' , 'animated fadeOutUp'] ; break ;
+                case 2 : ret  = ['animated shake' , 'animated headshake'] ; break ;
+                case 3 : ret  = ['animated swing' , 'animated tada'] ; break ;
                 case 29 : ret = ['animated wobble' , 'jello '] ; break ;
-                case 4 : ret = ['animated bounceInLeft' , 'animated bounceOutRight'] ; break ;
-                case 5 : ret = ['animated bounceInUp' , 'animated bounceOut'] ; break ;
-                case 6 : ret = ['animated bounceInRight' , 'animated bounceOutLeft'] ; break ;
-                case 7 : ret = ['animated rotateInDownLeft' , 'animated bounceOutUp'] ; break ;
-                case 8 : ret = ['animated fadeIn' , 'animated fadeOut'] ; break ;
-                case 9: ret = ['animated fadeInDown' , 'animated fadeOutDown'] ; break ;
+                case 4 : ret  = ['animated bounceInLeft' , 'animated bounceOutRight'] ; break ;
+                case 5 : ret  = ['animated bounceInUp' , 'animated bounceOut'] ; break ;
+                case 6 : ret  = ['animated bounceInRight' , 'animated bounceOutLeft'] ; break ;
+                case 7 : ret  = ['animated rotateInDownLeft' , 'animated bounceOutUp'] ; break ;
+                case 8 : ret  = ['animated fadeIn' , 'animated fadeOut'] ; break ;
+                case 9: ret   = ['animated fadeInDown' , 'animated fadeOutDown'] ; break ;
                 case 10 : ret = ['animated fadeInLeft' , 'animated  fadeOutLeft'] ; break ;
                 case 12 : ret = ['animated fadeInRight' , 'animated fadeOutRight'] ; break ;
                 case 13 : ret = ['animated fadeInUp' , 'animated fadeInUpBig'] ; break ;
@@ -129,21 +130,22 @@ function thisNav( navObject ) {
     // get the id of the html element
     const nav = $(navObject).attr('id');
     if(lastClickedNav === nav) {
+        loadModuleDefaults (nav) ;
+        console.log("loading this again");
         return ;
     }
 
     let template = null ;
     let clone    = null ;
 
-
     switch ( nav ) {
-        case 'temp_create_questions':
+        case 'temp_create_questions' :
             template = navLinks[0] .import.querySelector("."+nav) ;
             break;
-        case 'temp_answer_questions':
+        case 'temp_answer_questions' :
             template = navLinks[1].import.querySelector("." + nav);
             break;
-        case 'temp_session_tables':
+        case 'temp_session_tables'   :
             template = navLinks[2].import.querySelector("." + nav);
             break;
 
@@ -151,10 +153,31 @@ function thisNav( navObject ) {
 
         clone    = document.importNode(template.content , true);
         contentHolder.empty().delay(500).append(clone);
+        loadModuleDefaults (nav) ;
         lastClickedNav = nav ;
 
 }
+function loadModuleDefaults(nav_selected) {
 
+        if( nav_selected !== '' ) {
+            // ignore if nav is empty
+            switch (nav_selected) {
+                case 'temp_create_questions' :
+                    //
+                    break;
+                case 'temp_answer_questions' :
+                    setTimeout(()=> startTest() , 1500);
+                    break;
+                case 'temp_session_tables'   :
+                    setTimeout(() =>{
+                        getSessionData('1');
+                    },500) ;
+                    break;
+            }
+        }
+
+
+}
 /*********************************************************************************************/
 
 
@@ -177,9 +200,9 @@ function error_input_element(isTrue , elementId) {
 /*********************************************************************************************/
 function emptyInputs ( arrInput_ids , arrSelect_ids ) {
 
-    for(let i = 0 ; i < arrInput_ids.length ; i ++){
+    for (let i = 0; i < arrInput_ids.length; i++) {
         let id = arrInput_ids[i];
-        $("#"+id).val('');
+        $("#" + id).val('');
     }
     for(let i = 0 ; i < arrSelect_ids.length ; i ++){
         let id = arrSelect_ids[i];

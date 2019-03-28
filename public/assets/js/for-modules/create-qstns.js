@@ -163,7 +163,35 @@ function runImageTransformation() {
         $("#img").slideUp('slow');
     }
 }
-document.getElementById("inp").addEventListener("change", runImageTransformation);
+function runImageTransformation() {
+
+    if (this.files && this.files[0]) {
+        $("#img").slideDown('fast');
+        imageStrings = [];
+        for (let x = 0; x < this.files.length; x++) {
+            let file = this.files[x];
+
+            document.getElementById('b64').innerText = "Loading Image Please wait";
+            const fileReader = new FileReader();
+
+            fileReader.addEventListener('load', e => {
+
+                document.getElementById("img").src = e.target.result;
+                document.getElementById('b64').innerText = "Done Continue";
+
+                imageStrings.push(e.target.result);
+
+            });
+            fileReader.readAsDataURL(file);
+        }
+    } else {
+        $("#img").slideUp('slow');
+    }
+}
+function changeImageFileSelection() {
+    runImageTransformation ()  ;
+}
+//document.getElementById("inp").addEventListener("change", runImageTransformation);
 // eslint-disable-next-line no-unused-vars
 function changeImageSelection() {
     let image_qstn = $("#image_qstn").val();
