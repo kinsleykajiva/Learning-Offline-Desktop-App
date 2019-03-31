@@ -31,9 +31,10 @@ function createMainWindow() {
     );
     //client.create(mainWindow);
     win.webContents.openDevTools()
-    win.on('closed', onClosed);
-    require("./xpressRouting");// starting the express server
-    return win;
+    //win.setMenu(null) ;
+    win.on('closed', onClosed) ;
+    require("./xpressRouting") ;// starting the express server
+    return win ;
 }
 
 app.on('window-all-closed', () => {

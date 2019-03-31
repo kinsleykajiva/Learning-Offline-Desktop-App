@@ -1,5 +1,5 @@
 'use strict';
-let imageStrings = [];
+let imageStrings = [] ;
 
 
 function saveNewQuestion() {
@@ -17,12 +17,12 @@ function saveNewQuestion() {
     if(mainQuestion === ''){
         error_input_element(true , "mainQuestion");
 
-          Toast.fire({
-            timer:4000 ,
-            type: 'error',
-            title: 'Please Fill In Required Detail'
-          }) ;
-          return ;
+        Toast.fire({
+            timer : 4000 ,
+            type  : 'error',
+            title : 'Please Fill In Required Detail'
+        }) ;
+        return ;
 
     }
     error_input_element(false , "mainQuestion");
@@ -32,9 +32,9 @@ function saveNewQuestion() {
 
             error_input_element(true , "inp");
             Toast.fire({
-                timer:4000 ,
-                type: 'error',
-                title: 'Please Select Diagram File'
+                timer : 4000 ,
+                type  : 'error',
+                title : 'Please Select Diagram File'
               }) ;
               return ;
         }
@@ -53,9 +53,9 @@ function saveNewQuestion() {
     if(response_type === 'single'){
          let anySlect = false;
          $("input.singlePossibleClass[type=radio]").each( (i ,el) => {
-                anySlect = !anySlect ?  $(el).is(':checked') : false ;
-                let value_ =$(el).parent().parent().prev("div").find("input").val() ;
-                let key_ = $(el).parent().children().attr('value');
+                anySlect   = !anySlect ?  $(el).is(':checked') : false ;
+                let value_ = $(el).parent().parent().prev("div").find("input").val() ;
+                let key_   = $(el).parent().children().attr('value');
                  if(value_ !== ''){
                     singlePossibleClass . push( $(el).is(':checked') ?  { [key_] : value_}  : {'null' : value_ } );
                 }
@@ -63,9 +63,9 @@ function saveNewQuestion() {
             } );
         if( !singlePossibleClass.length /*|| !anySlect*/ ){
             Toast.fire({
-                timer:4000 ,
-                type: 'error',
-                title: 'Please Set Possible Solutions single'
+                timer : 4000 ,
+                type  : 'error',
+                title : 'Please Set Possible Solutions single'
               }) ;
               return ;
         }
@@ -73,9 +73,9 @@ function saveNewQuestion() {
     if(response_type === 'multiple'){
         let anySlect = false;
         $("input.multiPossibleSelects[type=checkbox]").each( (i ,el) => {
-                 anySlect = !anySlect ?  $(el).is(':checked') : false ;
-                let value_ =$(el).parent().parent().prev("div").find("input").val() ;
-                let key_ = $(el).parent().children().attr('value');
+                anySlect   = !anySlect ?  $(el).is(':checked') : false ;
+                let value_ = $(el).parent().parent().prev("div").find("input").val() ;
+                let key_   = $(el).parent().children().attr('value');
                 if (value_ !== '') {
                     multiPossibleSelects . push($(el).is(':checked') ? { [key_] : value_}  : {'null' : value_ } );
                 }
@@ -84,28 +84,30 @@ function saveNewQuestion() {
 
         if( !multiPossibleSelects.length /* || !anySlect*/ ){
             Toast.fire({
-                timer:4000 ,
-                type: 'error',
-                title: 'Please Set Possible Solutions m'
+                timer : 4000 ,
+                type  : 'error',
+                title : 'Please Set Possible Solutions m'
               }) ;
               return ;
         }
     }
 
     let save = {
-        questionHead : mainQuestion ,
-        figure_arr:!imageStrings.length ? null : imageStrings ,
-        solution_head : askForResponseSol === '' ?  'Select Solution .' : askForResponseSol ,
-        possible_solutions_arr :  singlePossibleClass.length === 0 ? multiPossibleSelects : singlePossibleClass
+        questionHead           : mainQuestion ,
+        figure_arr             : !imageStrings.length ? null                             : imageStrings ,
+        solution_head          : askForResponseSol === '' ?  'Select Solution .'         : askForResponseSol ,
+        possible_solutions_arr : singlePossibleClass.length === 0 ? multiPossibleSelects : singlePossibleClass
     };
     //console.log(save);
     let myJSON = JSON.stringify(save);
 
     Swal.fire({
-          type: 'info',
-          title: 'Saving ',
-          text: 'Saving Please Wait!' ,
-          onBeforeOpen : ()=>{
+          type              : 'info',
+          title             : 'Saving ',
+          allowOutsideClick : false ,
+          allowEscapeKey    : false ,
+          text              : 'Saving Please Wait!' ,
+          onBeforeOpen      : ()=>{
             Swal.showLoading();
           }
     });
@@ -115,18 +117,18 @@ function saveNewQuestion() {
                         Swal.close() ;
                         if(response === 'done'){
                             Toast.fire({
-                                timer:4000 ,
-                                type: 'success',
-                                title: 'Saved Question !'
+                                timer : 4000 ,
+                                type  : 'success',
+                                title : 'Saved Question !'
                               }) ;
                             emptyInputs(['mainQuestion' ,'inp'  ] , ['image_qstn' , 'response_type']);
                             changeSolutionTypeView() ;
                             changeImageSelection() ;
                         }else{
                             Toast.fire({
-                                timer:4000 ,
-                                type: 'error',
-                                title: 'Failed to save , Try again !'
+                                timer : 4000 ,
+                                type  : 'error',
+                                title : 'Failed to save , Try again !'
                               }) ;
                         }
                 }).fail(()=>{
@@ -189,7 +191,7 @@ function runImageTransformation() {
     }
 }
 function changeImageFileSelection() {
-    runImageTransformation ()  ;
+   // runImageTransformation ()  ;
 }
 //document.getElementById("inp").addEventListener("change", runImageTransformation);
 // eslint-disable-next-line no-unused-vars

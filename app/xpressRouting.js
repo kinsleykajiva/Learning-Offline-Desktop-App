@@ -8,7 +8,7 @@
 
 const mUtil      = require('./utils/utilConstants') ;
 const xpress     = require('express');
-const  assert = require('assert');
+const  assert    = require('assert');
 const app        = xpress();
 const bodyParser = require('body-parser') ;
 const qstns      = require('./DBAccess/local/ned/dbQuestions');
@@ -47,8 +47,8 @@ app.post('/writeQstn' , (req,res)=>{
 /*------------------------------------------------------------------------------------------*/
 app.get('/fetchqstns' , (req , res) => {
           let sets = req.query.sets ;
-          sets = sets.split('-');
-          sets = sets.map(Number) ;
+          sets     = sets.split('-');
+          sets     = sets.map(Number) ;
           qstns.getAllQuestions(sets).then( response => {
            res.json(response);
           }) .catch ( error => console.log( "Error @/fetchqstns/ " + error ) ) ;
@@ -72,6 +72,9 @@ app.get("/imgGet" , (req , res)=>{
 
 /*------------------------------------------------------------------------------------------*/
 
+app.get( "/categoriesAll"  , ( req , res ) => {
+              // get categories
+});
 
 /*------------------------------------------------------------------------------------------*/
 

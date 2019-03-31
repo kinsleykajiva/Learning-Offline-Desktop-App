@@ -5,15 +5,17 @@
  * This is the base js file to give functionality to the View  .
  * Will be included in the view file or html file
  */
-const lowerAlph = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-const upperCaseAlp = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-const alphabetArray= "abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+const lowerAlph         = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+const upperCaseAlp      = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+const alphabetArray     = "abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
 //
-const navLinks       = document.querySelectorAll('link[rel="import"]');
-const contentHolder  = $("#mainContent") ;
-let   lastClickedNav = null;
-const url_ = "http://localhost:3500/" ;
-let reloadSession = true ;
+const navLinks          = document.querySelectorAll('link[rel                                                                                                 = "import"]');
+const contentHolder     = $("#mainContent") ;
+let   lastClickedNav    = null;
+const url_              = "http://localhost:3500/" ;
+let reloadSession       = true ;
+const mainTitleBar      = $ ("#title") .text() ;
+const currentCategories = null ;
 /*********************************************************************************************/
 $.notifyDefaults({
 
@@ -25,19 +27,19 @@ function notify_simple(message, time_in_seconds){
         $.growl({
             message: message
         },{
-            type: 'inverse',
-            allow_dismiss: false,
-            label: 'Cancel',
-            className: 'btn-xs btn-inverse',
-            placement: {
-                from: 'bottom',
-                align: 'right'
-            },
-            delay: time_in_seconds * 1000 ,
-            animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-            },
+            type          : 'inverse',
+            allow_dismiss : false,
+            label         : 'Cancel',
+            className     : 'btn-xs btn-inverse',
+            placement     : {
+                                from  : 'bottom',
+                                align : 'right'
+                            },
+            delay         : time_in_seconds * 1000 ,
+            animate       : {
+                                    enter : 'animated fadeInRight',
+                                    exit  : 'animated fadeOutRight'
+                            },
             offset: {
                 x: 30,
                 y: 30
@@ -129,23 +131,26 @@ function animatedRandomTypes() {
 function thisNav( navObject ) {
     // get the id of the html element
     const nav = $(navObject).attr('id');
-    if(lastClickedNav === nav) {
-        loadModuleDefaults (nav) ;
-        console.log("loading this again");
-        return ;
+    if( lastClickedNav === nav ) {
+            // loadModuleDefaults (nav) ;
+            return ;
     }
+    //$ ( navObject ) .prop ( 'disabled' , true ) ;
 
     let template = null ;
     let clone    = null ;
 
     switch ( nav ) {
         case 'temp_create_questions' :
+            $ ("#title") .text(  "Create Questions -" + mainTitleBar ) ;
             template = navLinks[0] .import.querySelector("."+nav) ;
             break;
         case 'temp_answer_questions' :
+            $ ("#title") .text(  "Answer Questions -" + mainTitleBar ) ;
             template = navLinks[1].import.querySelector("." + nav);
             break;
         case 'temp_session_tables'   :
+            $ ("#title") .text(  "View Session -" + mainTitleBar ) ;
             template = navLinks[2].import.querySelector("." + nav);
             break;
 
@@ -157,13 +162,24 @@ function thisNav( navObject ) {
         lastClickedNav = nav ;
 
 }
+/*********************************************************************************************/
+function getCateries () {
+            $.get( url_ + 'categoriesAll', {})
+            .done( response => {
+                    if ( response.length ) {
+                            currentCategories = response ;
+                    }
+            });
+}
+
+/*********************************************************************************************/
 function loadModuleDefaults(nav_selected) {
 
         if( nav_selected !== '' ) {
             // ignore if nav is empty
             switch (nav_selected) {
                 case 'temp_create_questions' :
-                    //
+                    document.getElementById("inp").addEventListener("change", runImageTransformation);
                     break;
                 case 'temp_answer_questions' :
                     setTimeout(()=> startTest() , 1500);
@@ -184,14 +200,14 @@ function loadModuleDefaults(nav_selected) {
 function error_input_element(isTrue , elementId) {
     if(isTrue){
         $('#'+elementId).css({
-            "border": "1px solid red",
-            "background": "#ff4e44"
+            "border"     : "1px solid red",
+            "background" : "#ff4e44"
         });
 
     }else{
         $('#'+elementId).css({
-            "border": "",
-            "background": ""
+            "border"     : "" ,
+            "background" : ""
         });
     }
 
@@ -229,13 +245,13 @@ function rangeArray(start, end) {
 /*********************************************************************************************/
 function getcurrentDate() {
     let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
-    if (dd < 10) {
+    let dd    = today.getDate();
+    let mm    = today.getMonth() + 1; //January is 0!
+    let yyyy  = today.getFullYear();
+    if ( dd < 10 ) {
         dd = '0' + dd
     }
-    if (mm < 10) {
+    if ( mm < 10 ) {
         mm = '0' + mm
     }
     return mm + '/' + dd + '/' + yyyy;
@@ -253,7 +269,7 @@ function getcurrentDate() {
  * @return     {String}  String.
  */
 String.prototype.replaceAll2 = function(search, replacement) {
-    var target = this;
+    let target = this;
     return target.split(search).join(replacement);
 };
 
@@ -263,9 +279,9 @@ String.prototype.replaceAll2 = function(search, replacement) {
 
 /*********************************************************************************************/
 function randString(x) {
-    var s = "";
+    let s = "";
     while (s.length < x && x > 0) {
-        var r = Math.random();
+        let r = Math.random();
         s += (r < 0.1 ? Math.floor(r * 100) : String.fromCharCode(Math.floor(r * 26) + (r > 0.5 ? 97 : 65)));
     }
     return s;
@@ -287,14 +303,14 @@ function getRndInteger(min, max) {
  * @return     {<String>}  random receipt Number.
  */
 function receiptNumber() {
-    let ret = "";
-    ret = getcurrentDate(); //  dd + '/' + mm + '/' + yyyy;
-    let dd = ret.split('/')[0];
-    let mm = ret.split('/')[1];
-    let yyyy = ret.split('/')[2];
+    let ret      = "";
+    ret          = getcurrentDate(); //  dd + '/' + mm + '/' + yyyy;
+    let dd       = ret.split('/')[0];
+    let mm       = ret.split('/')[1];
+    let yyyy     = ret.split('/')[2];
     let millTime = new Date().getMilliseconds() ;
-    let ranS = randString(getRndInteger(5, getRndInteger(3, 22))).toUpperCase();
-    ret = dd + ranS.substring(2, 4) + ranS.charAt(getRndInteger(1, 2)) + '-' + mm + '-' + ranS.charAt(getRndInteger(1, 8)) + yyyy + '`'+millTime;
+    let ranS     = randString(getRndInteger(5, getRndInteger(3, 22))).toUpperCase();
+    ret          = dd + ranS.substring(2, 4) + ranS.charAt(getRndInteger(1, 2)) + '-' + mm + '-' + ranS.charAt(getRndInteger(1, 8)) + yyyy + '`'+millTime;
     return ret;
 }
 /*********************************************************************************************/
@@ -346,9 +362,9 @@ function randomIDString(lenSize, chars) {
  * @returns {string} Random String
  */
 function randomStringID() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 5; i++) {
+    let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < 5; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
@@ -361,12 +377,12 @@ function resteForm(formIdObject) {
 /*********************************************************************************************/
 function idleTimer() {
     let t;
-    //window.onload = resetTimer;
+    //window.onload    = resetTimer;
     window.onmousemove = resetTimer; // catches mouse movements
     window.onmousedown = resetTimer; // catches mouse movements
-    window.onclick = resetTimer; // catches mouse clicks
-    window.onscroll = resetTimer; // catches scrolling
-    window.onkeypress = resetTimer; //catches keyboard actions
+    window.onclick     = resetTimer; // catches mouse clicks
+    window.onscroll    = resetTimer; // catches scrolling
+    window.onkeypress  = resetTimer; //catches keyboard actions
     function logout() {
         window.location.href = '/action/logout'; //Adapt to actual logout script
     }
@@ -459,19 +475,19 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 
 /*********************************************************************************************/
-var contains = function(needle) {
+let contains = function(needle) {
     // Per spec, the way to identify NaN is that it is not equal to itself
-    var findNaN = needle !== needle;
-    var indexOf;
+    let findNaN = needle !== needle;
+    let indexOf;
 
     if(!findNaN && typeof Array.prototype.indexOf === 'function') {
         indexOf = Array.prototype.indexOf;
     } else {
         indexOf = function(needle) {
-            var i = -1, index = -1;
+            let i = -1, index = -1;
 
             for(i = 0; i < this.length; i++) {
-                var item = this[i];
+                let item = this[i];
 
                 if((findNaN && item !== item) || item === needle) {
                     index = i;

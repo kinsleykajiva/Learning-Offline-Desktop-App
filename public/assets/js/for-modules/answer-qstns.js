@@ -1,16 +1,16 @@
 //'use strict' ;
 
-let skip = 0 ;
-let next = 10 ;
+let skip                = 0 ;
+let next                = 10 ;
 
-let QuizeArray = [] ;
-let idsArray = [] ;
+let QuizeArray          = [] ;
+let idsArray            = [] ;
 let currentQuizPosition = 0 ;
-let currentQuizId = null;
-let sessionID = receiptNumber() ;
-let correctCollect = [] ;
-let dataSrc = []; // keep this variable in check esp when new questio are added and this will need acheck on references
-let scoreSum = 0 ;
+let currentQuizId       = null;
+let sessionID           = receiptNumber() ;
+let correctCollect      = [] ;
+let dataSrc             = []; // keep this variable in check esp when new questio are added and this will need acheck on references
+let scoreSum            = 0 ;
 function markingProcess() {
 
 	scoreSum = correctCollect.reduce( (total, currentValue) => {   return total + currentValue.score; },  scoreSum);
@@ -19,18 +19,18 @@ function markingProcess() {
 function restartQstns(){
 
 	// this will restart the session
-	QuizeArray = [] ;
-	idsArray = [] ;
+	QuizeArray          = [] ;
+	idsArray            = [] ;
 	currentQuizPosition = 0 ;
-	currentQuizId = null ;
-	sessionID = receiptNumber() ;
-	correctCollect = [] ;
-	scoreSum = 0 ;
-	reloadSession = true ;
+	currentQuizId       = null ;
+	sessionID           = receiptNumber() ;
+	correctCollect      = [] ;
+	scoreSum            = 0 ;
+	reloadSession       = true ;
 	Swal.fire({
-	          type: 'info',
-	          title: 'Process ',
-	          text: 'Retarting Session Please wait '  ,
+	          type         : 'info',
+	          title        : 'Process ',
+	          text         : 'Retarting Session Please wait '  ,
 	          onBeforeOpen : ()=>{
 	            Swal.showLoading();
 	          }
@@ -47,9 +47,11 @@ function showNextQstn(){
 	if(currentQuizPosition === QuizeArray.flat().length || currentQuizPosition > QuizeArray.flat().length   ) {
 		markingProcess() ;
 		Swal.fire({
-		          type: 'info',
-		          title: 'Progress State ',
-		          text: "You Have answered all questions ! \n Your Score is " + scoreSum + ' out of ' + QuizeArray.flat().length
+		          type              : 'info',
+		          title             : 'Progress State ',
+		          allowOutsideClick : false ,
+		          allowEscapeKey    : false ,
+		          text              : "You Have answered all questions ! \n Your Score is " + scoreSum + ' out of ' + QuizeArray.flat().length
 		    });
 		currentQuizPosition = 0 ;
 		$("#nextquestions").text("Done , Restart .");
@@ -90,20 +92,22 @@ function showNextQstn(){
 	}
 
 	Swal.fire({
-	          type: 'info',
-	          title: 'Process ',
-	          text: 'Wait ... '  ,
-	          onBeforeOpen : ()=>{
+	          type              : 'info',
+	          title             : 'Process ',
+	          allowOutsideClick : false ,
+	          allowEscapeKey    : false ,
+	          text              : 'Wait ... '  ,
+	          onBeforeOpen      : ()=>{
 	            Swal.showLoading();
 	          }
 	    });
 	let temp_scoreSum = correctCollect.reduce( (total, currentValue) => {   return total + currentValue.score; },  0 );
 	let obj = {
-		qstn_id : currentQuizId ,
+		qstn_id           : currentQuizId ,
 		qstn_response_arr : choices ,
-		qstn_user_id : $("#loogedUseer").text().trim() ,
-		session : sessionID ,
-		score : temp_scoreSum
+		qstn_user_id      : $("#loogedUseer").text().trim() ,
+		session           : sessionID ,
+		score             : temp_scoreSum
 	};
 	let myJSON = JSON.stringify(obj);
 	$.post(url_ + 'saveResponse', {data : myJSON
@@ -124,22 +128,19 @@ function resumeSession () {
 	
 	currentQuizPosition-- ;
 	currentQuizId = idsArray [currentQuizPosition] ;
-	
-	let quizes = QuizeArray.flat() ;
-	//console.log("Now Position" + [currentQuizPosition]);
+	let quizes    = QuizeArray.flat() ;
 	$("#question_quize").html(quizes[currentQuizPosition])
-			.promise().done(
-				()=> getQuestionImage(currentQuizId)
-			) ;
+	.promise().done(
+	                ()=> getQuestionImage(currentQuizId)
+	                ) ;
 	currentQuizPosition++;		
 	$("#qstn_numberer").text('Question Number ' + currentQuizPosition   ) ;
 	$("#sessionID").text( ' . Session ID : ' + sessionID);
 	$("#counter_out_of").text(' ' + currentQuizPosition    + ' out of ' +  quizes.length ) ;	
 }
 function nextQstn () {
-
 	currentQuizId = idsArray [currentQuizPosition] ;
-	let quizes = QuizeArray.flat() ;
+	let quizes    = QuizeArray.flat() ;
 	$("#question_quize").html(quizes[currentQuizPosition])
 			.promise().done(
 				()=> getQuestionImage(currentQuizId)
@@ -151,9 +152,12 @@ function nextQstn () {
 
 }
 function startTest() {
-	if ( ! reloadSession ) {
+	if ( ! reloadSession && currentQuizPosition < 1 ) {
 		resumeSession () ;
 		return;
+	}
+	if ( QuizeArray.length ) {
+		return ;
 	}
 	sessionID = receiptNumber() ;
 	reloadSession = false ;
@@ -175,10 +179,12 @@ function getRndInteger(min, max) {
 function getQuestions () {
 	
 	Swal.fire({
-	          type: 'info',
-	          title: 'Process ',
-	          text: QuizeArray.length ? 'Fetching More Questions Please Wait!' :  'Fetching Questions Please Wait!'  ,
-	          onBeforeOpen : ()=>{
+	          type              : 'info',
+	          title             : 'Process ',
+	          allowOutsideClick : false ,
+	          allowEscapeKey    : false ,
+	          text              : QuizeArray.length ? 'Fetching More Questions Please Wait!' : 'Fetching Questions Please Wait!'  ,
+	          onBeforeOpen      : ()=>{
 	            Swal.showLoading();
 	          }
 	    });
@@ -193,17 +199,9 @@ function getQuestions () {
 			let xr = createQuestionView(json);
 			QuizeArray.push ( xr ) ;
 			nextQstn (); // start the session
-			 Swal.close();
+			Swal.close();
 		}
-	}).catch( err => {
-		/*console.log(err);*/
-		/*Toast.fire({
-		            timer:4000 ,
-		            type: 'error',
-		            title: 'Failed to get data , Reload again !'
-		          }) ;*/
-
-	});
+	}).catch( err => console.error(err));
 }
 //
 function getQuestionImage (id_record) {
@@ -222,7 +220,7 @@ function getQuestionImage (id_record) {
 		if(response.length) {
 			for(let i = 0 ; i < response.length  ; i++) {
 				let imgSrc = response[ i ]  ;
-				let id = "img_"+imgSrc._id ;
+				let id     = "img_"+imgSrc._id ;
 				//console.log(imgSrc._id);
 				if ( $("#" + id ) .length ) {
 					if ( imgSrc.figures == null ) {
@@ -244,7 +242,7 @@ function getQuestionImage (id_record) {
 
 function ansCheckChange( type , id ) {
 	// the unsed arguments have been set to be used in the future , as it maybe it could redudentant
-	let choices = []  ;
+	let choices              = []  ;
 	let choicesCountAvailble = $(".ans_resp_qnst_" + currentQuizId ).length ;
 	if ( ! choicesCountAvailble ) {
 		return ;
@@ -264,17 +262,17 @@ function ansCheckChange( type , id ) {
 
 
 function createQstnAnswers(id,data) {
-	let li = ``;
+	let li  = ``;
 	let kId = id ;
 	dataSrc . push(data) ;
-	id = 'anns_' + id ;
+	id      = 'anns_' + id ;
 
 	let SingSolutionedFlatArray = data.map(Object.keys).flat(); // outputs ["A", "B", "null"] or ["A", "B", "null","null"]
 
-	const search = 'null' ;
-	let nullCount = SingSolutionedFlatArray.reduce( (n,val) => { return n + (val === search) ; } , 0) ; // counts how many times null occures in the flatArray SingSolutionedFlatArray
+	const search                = 'null' ;
+	let nullCount               = SingSolutionedFlatArray.reduce( (n,val) => { return n + (val === search) ; } , 0) ; // counts how many times null occures in the flatArray SingSolutionedFlatArray
 
-	let type = nullCount === 1 ?  'radio' : 'checkbox' ;
+	let type                    = nullCount === 1 ?  'radio' : 'checkbox' ;
 
 	for( let i = 0 ; i < data.length ; i++ ){
 		let val = data [ i ] ;
@@ -293,8 +291,8 @@ function createQstnAnswers(id,data) {
 	return li ;
 }
 function createQuestionView (data) {
-	let divV = ``;
-	let retVal =  [] ;
+	let divV   = ``;
+	let retVal = [] ;
 	for(let x = 0  ; x < data.length ; x++){
 		let val = data[x] ;
 

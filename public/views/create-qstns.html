@@ -13,6 +13,7 @@
 .checkbox input:checked + span:after{-webkit-animation:check .8s;-moz-animation:check .8s;-o-animation:check .8s;animation:check .8s;border-color:#555}
 
 .checkbox input:checked + .success:after{border-color:#8bc34a}
+.required_start {color: red ;}
 
               </style>
                 <div class="row">
@@ -24,14 +25,23 @@
                                     <span>Add a new Question</span>
                                 </div>
                                 <div class="card-block">
-                                    <h4 class="sub-title">Basic Inputs</h4>
+                                   
                                     <form onsubmit="return false;">
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label">Main Question * </label>
+                                            <label class="col-sm-2 col-form-label">Category</label>
+                                            <div class="col-sm-10">
+                                                <select  id="category" class="form-control" onchange="categorySelection()">
+                                                    <option value="null" selected="selected" >Select Category</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Main Question <span class="required_start" >*</span> </label>
                                             <div class="col-sm-10">
                                                 <input type="text" id="mainQuestion" placeholder="What is  , How can this ,.." class="form-control">
                                             </div>
                                         </div>
+                                        
                                          <div class="form-group row">
                                                 <label class="col-sm-2 col-form-label">Add Image ?</label>
                                                 <div class="col-sm-10">
@@ -53,7 +63,7 @@
                                                     </div>
                                                 </div>
                                             <div class="form-group row">
-                                                    <label class="col-sm-2 col-form-label">Response Type *</label>
+                                                    <label class="col-sm-2 col-form-label">Response Type <span class="required_start" >*</span></label>
                                                     <div class="col-sm-10">
                                                         <select name="select" id="response_type" class="form-control" onchange="changeSolutionTypeView()">
                                                             <option value="null" selected="selected" >Select Type</option>
@@ -106,7 +116,7 @@
                                         </div>
                                         <div class="form-group row">
                                                 <div class="col-sm-10">
-                                                    <button onclick="saveNewQuestion();" class="btn btn-round btn-primary"><i class="fa fa-save">Save</i></button>
+                                                    <button onclick="saveNewQuestion();" class="btn btn-round btn-primary"><i class="fa fa-save">&nbsp; Save</i></button>
                                                 </div>
                                             </div>
                                      </form>

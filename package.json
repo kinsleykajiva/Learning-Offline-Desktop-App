@@ -6,7 +6,12 @@
   "main": "app/index.js",
   "scripts": {
     "start": "electron .",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps" ,
+    "build": "electron-packager . app --platform win32 --arch x64 --out dist/",
+    "setup": "electron-installer-windows --app dist/app-win32-x64/ --dest dist/installers/"  ,
+    "encryptWindows": " cipher commands...", /*ping for error*/
+    "encryptMac": "OpenSSL commands...", /*ping for error*/
+    "build_encrypt_win": "encryptWindows && buildWin" 
   },
   "keywords": [
     "dump",
@@ -24,16 +29,19 @@
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "electron-about-window": "^1.12.1",
+    "electron-installer-windows": "^1.1.1",
     "electron-settings": "^3.2.0",
     "electron-titlebar-windows": "^3.0.0",
     "express": "^4.16.4",
     "got": "^9.6.0",
+    "knex": "^0.16.3",
     "lodash": "^4.17.11",
     "lovefield": "^2.1.12",
     "mathjs": "^5.7.0",
     "moment": "^2.24.0",
     "nedb": "^1.8.0",
     "realm": "^2.25.0",
+    "sqlite-cipher": "^0.3.6",
     "sqlite3": "^4.0.6",
     "uuid": "^3.3.2",
     "xor-crypt": "^1.1.1"

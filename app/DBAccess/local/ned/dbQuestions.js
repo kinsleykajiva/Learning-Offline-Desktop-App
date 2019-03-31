@@ -15,22 +15,23 @@
  }) ;
 
  let RESPONS_SCHEMA = {
-                              qstn_id : 12 ,
+                              qstn_id               : 12 ,
                               selected_response_arr : ['A'] ,
-                              saved_on_date : new Date() ,
-                              saved_by : 'user_id' ,
-                              session : 'jyu67n76756rghy'
+                              saved_on_date         : new Date() ,
+                              saved_by              : 'user_id' ,
+                              session               : 'jyu67n76756rghy'
                          };
 
- const SCHEMA_MIXED =  { id:12 , figurearr:'what is ...' ,
-    figure_arr:['base64String_1' , 'base64String_2'] ,
-    solution_head :'select possible Solution' ,
-    possible_solutions_arr : {A:'Option A' , B : 'option B' , null:'OptionC'} ,
+ const SCHEMA_MIXED =  { 
+                                    id                     : 12 ,
+                                    figurearr              : 'what is ...' ,
+                                    figure_arr             : ['base64String_1' , 'base64String_2'] ,
+                                    solution_head          : 'select possible Solution' ,
+                                    possible_solutions_arr : {A:'Option A' , B : 'option B' , null:'OptionC'} ,
+                                    selected_answers_arr   : ['A' ,'B' ,'B']
+                       } ;
 
-    selected_answers_arr : ['A' ,'B' ,'B']
- } ;
-
-module.exports.getAllSession = () => {  return new Promise ( (resolve , reject ) => {
+module.exports.getAllSession = () => {  return new Promise ( ( resolve , reject ) => {
                                                   dbResponses.find({} , (err , docs)=>{
                                                         if (err) {
                                                             reject("-9") ;
@@ -59,12 +60,12 @@ module.exports.saveInsertAnswer  = responseObject => {
                                       return new Promise ( ( resolve , reject ) =>{
 
                                                 let obj = {
-                                                  qstn_id : responseObject.qstn_id  ,
+                                                  qstn_id           : responseObject.qstn_id  ,
                                                   qstn_response_arr : responseObject.qstn_response_arr  ,
-                                                  qstn_user_id  : responseObject.qstn_user_id ,
-                                                  session : responseObject.session ,
-                                                  score : responseObject.score ,
-                                                  saved_on_date : new Date()
+                                                  qstn_user_id      : responseObject.qstn_user_id ,
+                                                  session           : responseObject.session ,
+                                                  score             : responseObject.score ,
+                                                  saved_on_date     : new Date()
                                                 };
 
                                                 dbResponses.insert( obj , ( error , newdoc) =>{
@@ -118,11 +119,11 @@ module.exports.saveInsertAnswer  = responseObject => {
  module.exports.saveNewQuestion = (qstnObject) => {
     return new Promise( (resolve , reject) =>{
         const save = {
-                question : qstnObject.questionHead ,
-                figures :qstnObject.figure_arr    ,
-                solution_head : qstnObject.solution_head || "Select Possible Solution" ,
+                question          : qstnObject.questionHead ,
+                figures           : qstnObject.figure_arr    ,
+                solution_head     : qstnObject.solution_head || "Select Possible Solution" ,
                 possible_solution : qstnObject.possible_solutions_arr ,
-                saved_on_date : new Date()
+                saved_on_date     : new Date()
         };
         db.insert(save , (error , newDoc)=>{
             if(error) {
